@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../wingets/app_bar.dart'; // Assuming you have a custom app bar
-import '../wingets/video_card.dart'; // Assuming you have a custom video card
+import 'app_bar.dart'; // Custom app bar file (YouTubeAppBar)
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,139 +19,162 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(), // Use your custom app bar
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return DefaultTabController(
+      length: 7, // Number of tabs in YouTubeAppBar
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: YouTubeAppBar(), // Updated AppBar
+        body: TabBarView(
           children: [
-            SizedBox(
-              height: 50,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  _buildCategoryChip("All"),
-                  _buildCategoryChip("Music"),
-                  _buildCategoryChip("Gaming"),
-                  _buildCategoryChip("News"),
-                  _buildCategoryChip("Movies"),
-                  _buildCategoryChip("Mixes"),
-                  _buildCategoryChip("Choirs")
-                ],
-              ),
+            _buildMainContent(), // Main Content for "All"
+            _buildCategoryContent('Songs'),
+            _buildCategoryContent('Mixes'),
+            _buildCategoryContent('Movies'),
+            _buildCategoryContent('Playlists'),
+            _buildCategoryContent('Live'),
+            _buildCategoryContent('Gaming'),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.black,
+          unselectedItemColor: Colors.grey,
+          selectedItemColor: Colors.white,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
             ),
-            const Divider(),
-
-            // Video list section
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "Videos",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.explore),
+              label: 'Shorts',
             ),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemCount: 2, // Update this with your actual video count
-              itemBuilder: (context, index) {
-                return VideoCard(
-                  imagePath: 'assets/video${index + 1}baking.jpg', // Pass image path
-                  title: "How to be Happy", // Example title
-                  channelName: "aggie245", // Example channel name
-                  views: "1.2M views", // Example views count
-                  timeAgo: "2 days ago", // Example time since published
-                );
-              },
+            BottomNavigationBarItem(
+              icon: Icon(Icons.add_circle_outline),
+              label: 'Upload',
             ),
-
-            const Divider(),
-
-            // Shorts section
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "Shorts",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.subscriptions),
+              label: 'Subscriptions',
             ),
-            SizedBox(
-              height: 150,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 2, // Update this with your actual short count
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: 100,
-                    margin: const EdgeInsets.all(5),
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.asset(
-                            'assets/short${index + 1}.jpg', // Use your short image
-                            height: 100,
-                            width: 100,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          "Short ${index + 1}", // Example short title
-                          style: const TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'You',
             ),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.black,
-        unselectedItemColor: Colors.black,
-        selectedItemColor: Colors.black,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+    );
+  }
+
+  Widget _buildMainContent() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "Featured Videos",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: 'Shorts',
+          _buildVideoCard(
+            imagePath: 'assets/images/happiness.jpg',
+            title: 'Happiness: A Journey to Joy',
+            uploader: 'Joyful Life',
+            views: '1.2M views',
+            likes: '25K',
+            comments: '2.3K comments',
+            subscribers: '10.5K subscribers',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline),
-            label: 'Upload',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.subscriptions),
-            label: 'Subscriptions',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'You',
+          _buildVideoCard(
+            imagePath: 'assets/images/hapi_ness.jpg',
+            title: 'The Art of Being Happy',
+            uploader: 'Happiness Guru',
+            views: '850K views',
+            likes: '18K',
+            comments: '1.8K comments',
+            subscribers: '12K subscribers',
           ),
         ],
       ),
     );
   }
 
-  Widget _buildCategoryChip(String label) {
+  Widget _buildCategoryContent(String category) {
+    return Center(
+      child: Text(
+        '$category Content Coming Soon!',
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildVideoCard({
+    required String imagePath,
+    required String title,
+    required String uploader,
+    required String views,
+    required String likes,
+    required String comments,
+    required String subscribers,
+  }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-      child: Chip(
-        label: Text(label),
-        backgroundColor: const Color.fromARGB(255, 248, 245, 245),
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.asset(
+              imagePath,
+              height: 200,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Text(
+                uploader,
+                style: const TextStyle(color: Colors.white70, fontSize: 14),
+              ),
+              const Spacer(),
+              Text(
+                subscribers,
+                style: const TextStyle(color: Colors.white70, fontSize: 14),
+              ),
+            ],
+          ),
+          Text(
+            views,
+            style: const TextStyle(color: Colors.white70, fontSize: 14),
+          ),
+          Text(
+            'Likes: $likes | Comments: $comments',
+            style: const TextStyle(color: Colors.white70, fontSize: 14),
+          ),
+        ],
       ),
     );
   }

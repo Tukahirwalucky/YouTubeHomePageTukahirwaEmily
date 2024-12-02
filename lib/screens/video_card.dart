@@ -33,11 +33,11 @@ class VideoCard extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 30),
           Text(
             title, // Use dynamic title
             style: const TextStyle(color: Colors.white, fontSize: 16),
-            maxLines: 2,
+            maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
